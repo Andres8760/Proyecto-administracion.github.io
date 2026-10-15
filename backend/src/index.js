@@ -9,12 +9,12 @@ app.use(express.json());
 
 const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL });
 
-app.get('/api/salud', async (req, res) => {
+app.get('/api/equipos', async (req, res) => {
   try {
-    const { rows } = await pool.query('SELECT NOW() AS hora');
-    res.json({ ok: true, hora: rows[0].hora });
+    const { rows } = await pool.query('SELECT id, nombre FROM equipos ORDER BY nombre');
+    res.json(rows);
   } catch (e) {
-    res.status(500).json({ ok: false, error: e.message });
+    res.status(500).json({ error: e.message });
   }
 });
 
