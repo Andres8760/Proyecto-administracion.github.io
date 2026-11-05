@@ -9,6 +9,13 @@ export const useAuthStore = defineStore('auth', () => {
   const estaLogueado = computed(() => !!token.value)
   const rol = computed(() => usuario.value?.rol ?? null)
 
+  // Pantalla principal de cada rol, a donde llega después de iniciar sesión
+  const rutaInicio = computed(() => {
+    if (rol.value === 'funcionario') return '/escaner'
+    if (rol.value === 'administrador') return '/admin'
+    return '/perfil'
+  })
+
   function guardarToken(t) {
     token.value = t
     localStorage.setItem('token', t)
@@ -43,5 +50,5 @@ export const useAuthStore = defineStore('auth', () => {
     localStorage.removeItem('token')
   }
 
-  return { token, usuario, estaLogueado, rol, cargarUsuario, login, registro, logout }
+  return { token, usuario, estaLogueado, rol, rutaInicio, cargarUsuario, login, registro, logout }
 })

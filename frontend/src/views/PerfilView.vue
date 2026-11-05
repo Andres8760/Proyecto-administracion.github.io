@@ -1,13 +1,15 @@
 <script setup>
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import QRCode from 'qrcode'
+import api from '@/services/api'
 import { useAuthStore } from '@/stores/auth'
 
 const auth = useAuthStore()
 const router = useRouter()
 
 const qrImagen = ref('')
+const historial = ref([])
 const esHincha = computed(() => auth.usuario?.rol === 'hincha')
 const puntos = computed(() => (auth.usuario?.puntos ?? 0).toLocaleString('es-CO'))
 
@@ -27,6 +29,17 @@ watch(
   },
   { immediate: true }
 )
+
+onMounted(async () => {
+  // Refresca los puntos por si el funcionario acaba de registrar un reciclaje
+  await auth.cargarUsuario()
+  if (!esHincha.value) return
+  try {
+    historial.value = (await api.get('/verificaciones/mias')).data
+  } catch {
+    historial.value = []
+  }
+})
 
 function salir() {
   auth.logout()
@@ -48,10 +61,36 @@ function salir() {
       <div>
         <span class="etiqueta">Mi equipo</span>
         <span class="valor">{{ auth.usuario.equipo }}</span>
+        <span v-if="auth.usuario.puntos > 0" class="etiqueta">
+          Puesto {{ auth.usuario.posicion_en_equipo }} en tu equipo ·
+          {{ auth.usuario.posicion_general }} en general
+        </span>
       </div>
       <div>
         <span class="etiqueta">Mis puntos</span>
         <span class="puntos">{{ puntos }}</span>
+      </div>
+    </div>
+
+    <div v-if="esHincha" class="tarjeta">
+      <h2 style="margin: 0 0 0.75rem; font-size: 1.1rem">Mis últimos reciclajes</h2>
+      <p v-if="!historial.length" class="apagado" style="margin: 0">
+        Aún no tienes reciclajes. Lleva tu material al punto de recolección del estadio.
+      </p>
+      <div v-else class="tabla-caja">
+        <table>
+          <thead>
+            <tr><th>Fecha</th><th>Partido</th><th>Residuo</th><th class="num">Pts.</th></tr>
+          </thead>
+          <tbody>
+            <tr v-for="h in historial" :key="h.id">
+              <td>{{ new Date(h.fecha_hora).toLocaleDateString('es-CO') }}</td>
+              <td>{{ h.partido }}</td>
+              <td>{{ h.cantidad }} × {{ h.residuo }}</td>
+              <td class="num">+{{ h.puntos }}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
@@ -64,7 +103,10 @@ function salir() {
         <dt>Rol</dt>
         <dd>{{ auth.usuario.rol }}</dd>
       </dl>
-      <button class="boton secundario" @click="salir">Cerrar sesión</button>
+      <div class="fila-botones">
+        <RouterLink class="boton" to="/ranking">Ver ranking</RouterLink>
+        <button class="boton secundario" @click="salir">Cerrar sesión</button>
+      </div>
     </div>
   </section>
   <p v-else>Cargando...</p>

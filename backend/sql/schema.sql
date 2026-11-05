@@ -1,13 +1,3 @@
--- =============================================================
--- Futciclar - Esquema de base de datos (PostgreSQL 13 o superior)
--- Basado en la seccion 3.4 (requisitos de datos) y 3.5 (reglas
--- de negocio) de la ERS, y en las columnas que ya usa el backend.
--- Ejecutar con:  psql "$DATABASE_URL" -f schema.sql
--- =============================================================
-
--- -------------------------------------------------------------
--- Datos maestros (los gestiona el administrador: RF-10, RF-11)
--- -------------------------------------------------------------
 
 CREATE TABLE equipos (
   id          SERIAL PRIMARY KEY,
@@ -37,10 +27,8 @@ CREATE TABLE tipos_residuo (
   puntos_por_unidad  INT NOT NULL CHECK (puntos_por_unidad > 0)
 );
 
--- -------------------------------------------------------------
--- Usuarios (RF-01, RF-02, RF-04)
+--Usuarios (RF-01, RF-02, RF-04)
 -- Un solo tipo de usuario con rol: hincha, funcionario o administrador.
--- -------------------------------------------------------------
 
 CREATE TABLE usuarios (
   id             SERIAL PRIMARY KEY,
@@ -56,9 +44,8 @@ CREATE TABLE usuarios (
   CONSTRAINT hincha_con_equipo CHECK (rol <> 'hincha' OR equipo_id IS NOT NULL)
 );
 
--- -------------------------------------------------------------
+
 -- Verificaciones (RF-05, RF-06, RF-07)
--- -------------------------------------------------------------
 
 CREATE TABLE verificaciones (
   id               SERIAL PRIMARY KEY,
@@ -88,10 +75,8 @@ CREATE TRIGGER verificacion_permanente
   BEFORE UPDATE OR DELETE ON verificaciones
   FOR EACH ROW EXECUTE FUNCTION bloquear_cambios_verificacion();
 
--- -------------------------------------------------------------
 -- Misiones (RF-13) - PROPUESTA, pendiente de validar con el grupo
 -- (observacion 1 de la ERS)
--- -------------------------------------------------------------
 
 CREATE TABLE misiones (
   id               SERIAL PRIMARY KEY,
@@ -117,12 +102,10 @@ CREATE TABLE misiones_cumplidas (
   CONSTRAINT mision_una_vez_por_hincha UNIQUE (mision_id, usuario_id)
 );
 
--- -------------------------------------------------------------
 -- Rankings (RF-08, RF-09)
 -- Los puntos NO se guardan en equipos ni en usuarios: se calculan
 -- sumando los movimientos. Asi se cumple RN-04 (el puntaje del
 -- equipo siempre es igual a la suma de sus verificaciones).
--- -------------------------------------------------------------
 
 CREATE VIEW movimientos_puntos AS
   SELECT usuario_id, equipo_id, puntos, fecha_hora FROM verificaciones
@@ -148,15 +131,12 @@ CREATE VIEW ranking_hinchas AS
    WHERE u.rol = 'hincha'
    GROUP BY u.id;
 
--- -------------------------------------------------------------
 -- Recompensas (RF-14) - FUTURO, no se crea en esta version
 -- recompensas(id, nombre, puntos_requeridos)
--- -------------------------------------------------------------
 
--- -------------------------------------------------------------
+
 -- Datos iniciales de ejemplo
 -- Los puntos por unidad son de ejemplo (observacion 2 de la ERS).
--- -------------------------------------------------------------
 
 INSERT INTO equipos (nombre, ciudad) VALUES
   ('America de Cali',        'Cali'),

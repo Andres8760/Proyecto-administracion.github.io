@@ -17,7 +17,7 @@ async function enviar() {
   cargando.value = true
   try {
     await auth.login(email.value, password.value)
-    router.push(String(route.query.redirect || '/perfil'))
+    router.push(String(route.query.redirect || auth.rutaInicio))
   } catch (e) {
     error.value = e.response?.data?.error || 'No se pudo conectar con el servidor'
   } finally {

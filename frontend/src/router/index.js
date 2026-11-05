@@ -23,6 +23,24 @@ const router = createRouter({
       component: () => import('@/views/PerfilView.vue'),
       meta: { requiereAuth: true },
     },
+    {
+      path: '/ranking',
+      name: 'ranking',
+      component: () => import('@/views/RankingView.vue'),
+      meta: { requiereAuth: true, ancho: true },
+    },
+    {
+      path: '/escaner',
+      name: 'escaner',
+      component: () => import('@/views/EscanerView.vue'),
+      meta: { requiereAuth: true, roles: ['funcionario'], ancho: true },
+    },
+    {
+      path: '/admin',
+      name: 'admin',
+      component: () => import('@/views/AdminView.vue'),
+      meta: { requiereAuth: true, roles: ['administrador'], ancho: true },
+    },
   ],
 })
 
@@ -35,11 +53,12 @@ router.beforeEach(async (to) => {
   if (to.meta.requiereAuth && !auth.estaLogueado) {
     return { name: 'login', query: { redirect: to.fullPath } }
   }
+  // RN-07: cada rol solo entra a sus pantallas
   if (to.meta.roles && !to.meta.roles.includes(auth.rol)) {
-    return { name: 'home' } // lo usaremos para las rutas del voluntario
+    return auth.rutaInicio
   }
   if (to.meta.soloInvitado && auth.estaLogueado) {
-    return { name: 'perfil' }
+    return auth.rutaInicio
   }
 })
 

@@ -4,6 +4,10 @@ import cors from 'cors';
 import { pool } from './db.js';
 import authRoutes from './routes/auth.js';
 import equiposRoutes from './routes/equipos.js';
+import catalogosRoutes from './routes/catalogos.js';
+import verificacionesRoutes from './routes/verificaciones.js';
+import rankingRoutes from './routes/ranking.js';
+import adminRoutes from './routes/admin.js';
 
 if (!process.env.JWT_SECRET || !process.env.DATABASE_URL) {
   console.error('Faltan JWT_SECRET o DATABASE_URL en backend/.env');
@@ -25,6 +29,10 @@ app.get('/api/salud', async (req, res) => {
 
 app.use('/api/auth', authRoutes);
 app.use('/api/equipos', equiposRoutes);
+app.use('/api', catalogosRoutes);
+app.use('/api/verificaciones', verificacionesRoutes);
+app.use('/api/ranking', rankingRoutes);
+app.use('/api/admin', adminRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ error: 'Ruta no encontrada' });
