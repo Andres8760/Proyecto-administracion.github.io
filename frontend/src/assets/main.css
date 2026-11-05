@@ -71,3 +71,21 @@ input, select {
 dl { display: grid; grid-template-columns: max-content 1fr; gap: 0.4rem 1rem; }
 dt { font-weight: 600; }
 dd { margin: 0; }
+/* Perfil del hincha */
+.perfil { display: grid; gap: 1rem; }
+.perfil h1 { margin: 0; font-size: 1.5rem; }
+.qr { display: grid; justify-items: center; gap: 0.75rem; text-align: center; }
+.qr h2, .resumen h2 { margin: 0; font-size: 1.1rem; justify-self: start; }
+.qr img {
+  width: 240px;
+  height: 240px;
+  padding: 0.75rem;
+  background: #fff;
+  border: 1px solid var(--borde);
+  border-radius: 12px;
+}
+.qr p { margin: 0; color: #55655d; font-size: 0.9rem; }
+.resumen { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.resumen .etiqueta { display: block; color: #55655d; font-size: 0.85rem; }
+.resumen .valor { font-size: 1.15rem; font-weight: 700; }
+.resumen .puntos { color: var(--verde); font-size: 2rem; font-weight: 700; line-height: 1; }

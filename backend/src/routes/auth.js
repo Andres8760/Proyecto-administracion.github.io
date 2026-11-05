@@ -93,9 +93,12 @@ router.post('/login', async (req, res) => {
 router.get('/me', auth, async (req, res) => {
   try {
     const { rows } = await pool.query(
-      `SELECT u.id, u.nombre, u.email, u.rol, u.equipo_id, e.nombre AS equipo
+      `SELECT u.id, u.nombre, u.email, u.rol, u.equipo_id, u.qr_token,
+              e.nombre AS equipo,
+              COALESCE(r.puntos, 0) AS puntos
          FROM usuarios u
          LEFT JOIN equipos e ON e.id = u.equipo_id
+         LEFT JOIN ranking_hinchas r ON r.id = u.id
         WHERE u.id = $1`,
       [req.user.id]
     );
