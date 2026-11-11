@@ -56,7 +56,6 @@ const textoPartido = (p) => `${nomEq(p.local)} vs. ${nomEq(p.visitante)} · ${fe
 const rk = { vista: 'equipos', eq: '' }
 let ad = 'reportes'
 const es = { paso: 'escanear', hincha: null, partido: '', tipo: null, cant: 1, res: null, err: '' }
-const AVISO = '<p class="aviso">Versión demostración: no hay servidor ni base de datos. Los datos son simulados y se guardan solo en tu navegador.</p>'
 
 /* ---------- Vistas ---------- */
 const barra = () => {
@@ -80,8 +79,7 @@ const vHome = () => {
       <div class="paso"><b>1</b>Regístrate y elige tu equipo</div><div class="paso"><b>2</b>Lleva tu material reciclable al estadio</div>
       <div class="paso"><b>3</b>El funcionario escanea tu QR</div><div class="paso"><b>4</b>Suman puntos tú y tu equipo</div></div></div>
     <div class="tarjeta"><h2>Los equipos que más reciclan</h2><table><tbody>
-      ${top.map((e) => `<tr><td>${e.pos}.º</td><td>${esc(e.nombre)}</td><td class="num">${fmt(e.puntos)} pts</td></tr>`).join('')}</tbody></table></div>
-    ${AVISO}</section>`
+      ${top.map((e) => `<tr><td>${e.pos}.º</td><td>${esc(e.nombre)}</td><td class="num">${fmt(e.puntos)} pts</td></tr>`).join('')}</tbody></table></div></section>`
 }
 
 const vLogin = () => `<section class="tarjeta"><h1>Iniciar sesión</h1>
@@ -91,7 +89,7 @@ const vLogin = () => `<section class="tarjeta"><h1>Iniciar sesión</h1>
     <p class="error" id="err"></p><button class="boton">Entrar</button>
   </form>
   <p class="pie">¿No tienes cuenta? <a href="#/registro">Regístrate</a></p>
-  <ul class="demo-cuentas"><li>Administrador: admin@futciclar.test / Admin12345</li><li>Funcionario: funcionario@futciclar.test / Funcionario123</li><li>Hincha: hincha1@futciclar.test / Hincha12345</li></ul>${AVISO}</section>`
+  <ul class="demo-cuentas"><li>Administrador: admin@futciclar.test / Admin12345</li><li>Funcionario: funcionario@futciclar.test / Funcionario123</li><li>Hincha: hincha1@futciclar.test / Hincha12345</li></ul></section>`
 
 const vRegistro = () => `<section class="tarjeta"><h1>Crear cuenta</h1>
   <form data-f="registro">
@@ -139,7 +137,7 @@ const vEscaner = () => {
   const t = db.residuos.find((r) => r.id === es.tipo)
   let izq
   if (es.paso === 'escanear') {
-    izq = `<div class="tarjeta"><h2>1. Escanear QR</h2><div class="camara-vacia"><p>La cámara no está disponible en la demo.<br>Escribe o pega el código del QR del hincha.</p></div>
+    izq = `<div class="tarjeta"><h2>1. Escanear QR</h2><div class="camara-vacia"><p>Escribe o pega el código del QR del hincha.</p></div>
       <form data-f="buscar" style="margin-top:.9rem"><label>Código del QR<input name="codigo" required /></label>
       <p class="error" id="err">${esc(es.err)}</p><div class="fila-botones"><button class="boton">Buscar hincha</button><button type="button" class="boton secundario" data-a="esEjemplo">Usar hincha de ejemplo</button></div></form></div>`
   } else if (es.paso === 'confirmar') {
@@ -174,8 +172,7 @@ const vAdmin = () => {
   else if (ad === 'residuos') c = tabla(['Tipo', 'Puntos por unidad'], db.residuos.map((r) => [esc(r.nombre), r.puntos_por_unidad]))
   else c = tabla(['Nombre', 'Correo', 'Rol'], db.usuarios.map((u) => [esc(u.nombre), esc(u.email), `<select data-c="rol" data-id="${u.id}" ${u.id === db.sesion ? 'disabled' : ''}>${['hincha', 'funcionario', 'administrador'].map((r) => `<option ${u.rol === r ? 'selected' : ''}>${r}</option>`).join('')}</select>`]))
   return `<section class="pagina"><header><h1>Panel del administrador</h1><p>Gestiona los datos de la liga y consulta los reportes de reciclaje.</p></header>
-    <div class="pestanas">${secs.map((s) => `<button class="${ad === s[0] ? 'activa' : ''}" data-a="adTab" data-v="${s[0]}">${s[1]}</button>`).join('')}</div>${c}
-    ${ad !== 'reportes' && ad !== 'usuarios' ? '<p class="apagado">En la demo esta sección es de solo lectura.</p>' : ''}</section>`
+    <div class="pestanas">${secs.map((s) => `<button class="${ad === s[0] ? 'activa' : ''}" data-a="adTab" data-v="${s[0]}">${s[1]}</button>`).join('')}</div>${c}</section>`
 }
 
 /* ---------- Rutas ---------- */
