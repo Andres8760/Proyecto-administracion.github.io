@@ -1,0 +1,12 @@
+$schema: https://api.gitbook.com/gitbook-docs.yaml
+site:
+  title: Futciclar
+  structure:
+    - type: space
+      key: futciclar
+      title: Futciclar
+      path: futciclar
+      default: true
+      content:
+        directory: ./
+        language: es
