@@ -17,9 +17,9 @@ onMounted(async () => {
 
 <template>
   <section class="perfil">
-    <div class="tarjeta" style="display: grid; gap: 0.75rem">
-      <h1 style="margin: 0">Recicla por tu equipo</h1>
-      <p style="margin: 0">
+    <div class="tarjeta hero">
+      <h1>Recicla por tu equipo</h1>
+      <p>
         Deposita tus residuos en las entradas del estadio, muestra tu QR y suma puntos para el equipo
         de tus amores.
       </p>

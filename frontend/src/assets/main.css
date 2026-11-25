@@ -61,6 +61,18 @@ a { color: var(--verde); }
   padding: 1.5rem;
 }
 
+.hero {
+  display: grid;
+  gap: 0.75rem;
+  border: 0;
+  background: linear-gradient(135deg, var(--verde) 0%, var(--verde-oscuro) 100%);
+  color: #fff;
+  box-shadow: var(--sombra-md);
+}
+.hero h1 { margin: 0; font-size: 1.75rem; }
+.hero p { margin: 0; }
+.hero .boton { background: #fff; color: var(--verde-oscuro); }
+
 input, select {
   width: 100%;
   padding: 0.7rem 0.8rem;
