@@ -1,30 +1,52 @@
 :root {
-  --verde: #1f8a4c;
+--verde: #1f8a4c;
   --verde-oscuro: #166938;
-  --fondo: #f4f7f5;
+  --verde-claro: #e9f5ee;
+  --verde-borde: #bfe3cd;
+  --fondo: #f3f7f4;
   --texto: #1d2b24;
+  --texto-suave: #55655d;
   --borde: #d3ddd7;
+  --peligro: #b3261e;
+  --peligro-claro: #fdf1f0;
+  --sombra-sm: 0 1px 2px rgba(29, 43, 36, 0.06), 0 1px 3px rgba(29, 43, 36, 0.08);
+  --sombra-md: 0 4px 14px rgba(29, 43, 36, 0.1);
+  --radio: 14px;
+  --radio-sm: 10px;
 }
 
 * { box-sizing: border-box; }
 
 body {
-  margin: 0;
+ margin: 0;
+  min-height: 100vh;
   font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.5;
   background: var(--fondo);
   color: var(--texto);
+}
+
+:focus-visible {
+  outline: 3px solid rgba(31, 138, 76, 0.45);
+  outline-offset: 2px;
 }
 
 a { color: var(--verde); }
 
 .barra {
+  position: sticky;
+  top: 0;
+  z-index: 10;
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  gap: 1rem;
-  padding: 0.75rem 1rem;
-  background: var(--verde);
+  gap: 0.5rem 1rem;
+  padding: 0.75rem 1.25rem;
+  background: linear-gradient(135deg, var(--verde) 0%, var(--verde-oscuro) 100%);
+  box-shadow: var(--sombra-md);
 }
+.barra a.router-link-exact-active { box-shadow: inset 0 -2px 0 #fff; }
 .barra a, .barra .enlace { color: #fff; text-decoration: none; font-weight: 600; }
 .barra nav { display: flex; align-items: center; gap: 1rem; }
 .enlace { background: none; border: 0; cursor: pointer; font-size: 1rem; }
@@ -34,10 +56,28 @@ a { color: var(--verde); }
 .tarjeta {
   background: #fff;
   border: 1px solid var(--borde);
-  border-radius: 12px;
-  padding: 1.25rem;
+  border-radius: var(--radio);
+  box-shadow: var(--sombra-sm);
+  padding: 1.5rem;
 }
-.tarjeta h1 { margin-top: 0; font-size: 1.5rem; }
+
+input, select {
+  width: 100%;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio-sm);
+  font-size: 1rem;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+input:focus, select:focus {
+  outline: none;
+  border-color: var(--verde);
+  box-shadow: 0 0 0 3px rgba(31, 138, 76, 0.2);
+}
+
+.boton { box-shadow: var(--sombra-sm); transition: background 0.15s ease, transform 0.1s ease; }
+.boton:hover { box-shadow: var(--sombra-md); }
+.boton:active { transform: translateY(1px); }
 
 form { display: grid; gap: 0.9rem; }
 label { display: grid; gap: 0.3rem; font-size: 0.9rem; font-weight: 600; }
