@@ -17,7 +17,7 @@ describe('guardas del router', () => {
     expect(router.currentRoute.value.name).toBe('login')
     expect(router.currentRoute.value.query.redirect).toBe('/perfil')
   })
-
+eline
   it('un invitado que pide /admin es enviado al login', async () => {
     await router.push('/admin')
     expect(router.currentRoute.value.name).toBe('login')
